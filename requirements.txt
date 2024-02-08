@@ -1,0 +1,6 @@
+emojis==0.7.0
+matplotlib==3.8.2
+numpy==1.26.3
+pandas==2.2.0
+streamlit==1.31.0
+watchdog==3.0.0

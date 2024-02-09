@@ -3,7 +3,7 @@ import time
 import random
 import emojis as em
 # Importing the sorting algorithms from ALl_algo
-from ALL_algo import bubble_sort, insertion_sort, merge_sort, quick_sort, heap_sort, bucket_sort, radix_sort, counting_sort, k_smallest
+from ALL_algo_1 import bubble_sort, insertion_sort, merge_sort, quick_sort, heap_sort, bucket_sort, radix_sort, counting_sort, k_smallest
 
 # Function to format an array into HTML table format for display
 def format_array(arr):
@@ -17,6 +17,7 @@ def format_array(arr):
 # Function to execute the selected sorting algorithm
 def execute_algorithm(algo, arr, k=None):
     start_time = time.time()      # Record start time of the algorithm
+    print("Start time:", start_time)
     steps = []
 
     # Special case for k_smallest algorithm
@@ -33,6 +34,7 @@ def execute_algorithm(algo, arr, k=None):
             steps.append(step.copy())
 
     end_time = time.time()       # Record end time of the algorithm
+    print("End time:", end_time)
     exec_time_microseconds = (end_time - start_time) * 1_000_000      # Calculate execution time in microseconds
     return steps, exec_time_microseconds
 
@@ -57,7 +59,10 @@ def main():
         # Allow user to input a custom array
         arr_str = st.text_input("Enter comma-separated elements of the array:", '')
         if arr_str:
-            st.session_state.arr = [int(item) for item in arr_str.split(',')]
+            try:
+                st.session_state.arr = [int(item) for item in arr_str.split(',')]
+            except ValueError:
+                st.error("Please enter a valid comma-separated list of integers.")
 
     selected_algos = st.multiselect('Select algorithms to compare', 
                                     ['Insertion Sort', 'Bubble Sort', 'Merge Sort', 'Quick Sort', 
@@ -85,6 +90,7 @@ def main():
 
             with st.expander(f"{algo} Output and Performance"):
                 st.write(f"Execution Time: {exec_time_microseconds:.2f} microseconds")
+                print("execution time", exec_time_microseconds)
                 steps_text = ""
                 for i, step in enumerate(steps):
                     if isinstance(step, list):  # Check if step is a list

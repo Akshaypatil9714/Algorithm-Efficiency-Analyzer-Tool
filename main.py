@@ -89,6 +89,7 @@ def main():
             color=alt.Color('Algorithm', legend=None),
             tooltip=['Algorithm', 'Execution Time (microseconds)']
         ).interactive()
+        st.markdown(f"<h3 style='text-align: center;'><i>Time Taken:</i>{em.encode(':timer_clock:')}</h3>", unsafe_allow_html=True)
         st.altair_chart(bar_chart, use_container_width=True)
 
 if __name__ == '__main__':

@@ -65,7 +65,7 @@ def main():
         algo_functions = {'Insertion Sort': insertion_sort, 'Bubble Sort': bubble_sort, 'Merge Sort': merge_sort, 'Quick Sort': quick_sort,
                           'Heap Sort': heap_sort, 'Bucket Sort': bucket_sort, 'Radix Sort': radix_sort, 'Counting Sort': counting_sort, 'K Smallest': k_smallest}
         times = {}
-        for algo in selected_algos:
+        for i, algo in enumerate(selected_algos):
             original_arr = st.session_state.arr.copy()
             if algo == 'K Smallest':
                 steps, exec_time_microseconds = execute_algorithm(algo_functions[algo], original_arr, k_value)
@@ -73,13 +73,14 @@ def main():
                 steps, exec_time_microseconds = execute_algorithm(algo_functions[algo], original_arr)
             times[algo] = exec_time_microseconds
 
+            unique_key = f"steps_text_{algo}_{i}"
             with st.expander(f"{algo} Output and Performance"):
                 st.write(f"Execution Time: {exec_time_microseconds:.2f} microseconds")
                 steps_text = ""
-                for i, step in enumerate(steps):
+                for step_index, step in enumerate(steps):
                     step_str = ', '.join(map(str, step)) if isinstance(step, list) else str(step)
-                    steps_text += f"**Step {i+1}:** {step_str}\n\n"
-                st.text_area("Sorting Steps:", steps_text, height=300)
+                    steps_text += f"**Step {step_index+1}:** {step_str}\n\n"
+                st.text_area("Sorting Steps:", steps_text, height=300, key=unique_key)
 
         df_times = pd.DataFrame(list(times.items()), columns=['Algorithm', 'Execution Time (microseconds)'])
         bar_chart = alt.Chart(df_times).mark_bar().encode(
@@ -88,7 +89,6 @@ def main():
             color=alt.Color('Algorithm', legend=None),
             tooltip=['Algorithm', 'Execution Time (microseconds)']
         ).interactive()
-        st.markdown(f"<h3 style='text-align: center;'><i>Time Taken:</i>{em.encode(':timer_clock:')}</h3>", unsafe_allow_html=True)
         st.altair_chart(bar_chart, use_container_width=True)
 
 if __name__ == '__main__':
